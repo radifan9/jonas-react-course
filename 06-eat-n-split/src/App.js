@@ -33,14 +33,17 @@ function Button({ onClick, children }) {
 export default function App() {
   const [friends, setFriends] = useState(initialFriends);
   const [showAddFriend, setShowAddFriend] = useState();
+  const [selectedFriend, setSelectedFriend] = useState(null);
 
   function handleShowAddFriend() {
     setShowAddFriend((show) => !show);
   }
 
-  // Here friend is a new data, friends is the old data
+  // friend = new data, friends = old data
   function handleAddFriend(friend) {
     setFriends((friends) => [...friends, friend]);
+
+    // Hide the form after updating it
     setShowAddFriend(false);
   }
 
@@ -60,8 +63,6 @@ export default function App() {
 }
 
 function FriendsList({ friends }) {
-  // const friends = initialFriends;
-
   return (
     <ul>
       {friends.map((friend) => (
@@ -103,10 +104,13 @@ function FormAddFriend({ onAddFriend }) {
   function handleSubmit(e) {
     e.preventDefault();
 
-    // Guard clause, if no name or image return immediately
+    // Guard clause, if no name or no image return immediately
     if (!name || !image) return;
 
+    // Create random UUID
     const id = crypto.randomUUID();
+
+    // Add a new friend object
     const newFriend = {
       id,
       name,
@@ -114,7 +118,6 @@ function FormAddFriend({ onAddFriend }) {
       balance: 0,
     };
 
-    // console.log(newFriend);
     onAddFriend(newFriend);
 
     // Reset the form, but it doesn't matter. Because new instance every FormAddFriend
